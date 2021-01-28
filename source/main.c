@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum Led_States{start,init,one,wait1,inc,two,wait2,three,wait3,four,wait4,five,wait5,six,wait6,reset} state;
+enum Led_States{start,init,one,wait1,inc,two,wait2,inc2,three,wait3,four,wait4,five,wait5,six,wait6,reset} state;
 
  unsigned char but1 = 0x00;
 //unsigned char but2 = 0x00;
@@ -49,12 +49,44 @@ void fsm(){
 
 		case wait1:
 		if(!but1){
-		state = one;
+		state = two;
 		}
 		else if (but1){
 		state = wait1;
 		}
 		break;
+		
+
+
+
+		case two:
+		if(but1){
+		state = inc2;
+		}
+		else if(!but1){
+		state = two;
+		}
+		break;
+
+		case inc2:
+		state = wait2;
+		break;
+
+		case wait2:
+		if(!but1){
+		state = two;
+		}
+		else if (but1){
+		state = wait2;
+		}
+		break;
+
+
+
+
+
+
+
 
 		default:
 		state = start;
@@ -69,11 +101,27 @@ void fsm(){
 		case one:
 			break;
 		case inc:
-			PORTB = 0x05;
+			PORTB = 0x01;
 			break;
 
 		case wait1:
 			break;
+
+
+		case two:
+			break;
+		case inc2:
+			PORTB = 0x02;
+			break;
+
+		case wait2:
+			break;
+
+
+
+
+
+
 		default:
 			break;
 	}
