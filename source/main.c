@@ -100,17 +100,12 @@ void fsm(){
 
 		case wait3:
 		if(!but1){
-		state = three;
+		state = four;
 		}
 		else if (but1){
 		state = wait4;
 		}
 		break;
-
-		
-
-
-		
 
 
 		case four:
@@ -128,14 +123,14 @@ void fsm(){
 
 		case wait4:
 		if(!but1){
-		state = four;
+		state = five;
 		}
 		else if (but1){
 		state = wait4;
 		}
 		break;
 
-/*
+
 
 		case five:
 		if(but1){
@@ -176,7 +171,7 @@ void fsm(){
 
 		case wait6:
 		if(!but1){
-		state = six;
+		state = reset;
 		}
 		else if (but1){
 		state = wait6;
@@ -185,9 +180,15 @@ void fsm(){
 
 
 
-		*/
-
-
+		
+		case reset:
+		if(but1){
+		state = start;
+		}
+		else if(!but1){
+		state = reset;
+		}
+		break;
 
 
 
@@ -238,18 +239,18 @@ void fsm(){
 		case four:
 			break;
 		case inc4:
-			PORTB = 0x8;
+			PORTB = 0x08;
 			break;
 
 		case wait4:
 			break;
 		
-/*
+
 
 		case five:
 			break;
 		case inc5:
-			PORTB = 0x30;
+			PORTB = 0x08;
 			break;
 
 		case wait5:
@@ -259,13 +260,15 @@ void fsm(){
 		case six:
 			break;
 		case inc6:
-			PORTB = 0x31;
+			PORTB = 0x10;
 			break;
 
 		case wait6:
 			break;
-*/
 
+		case reset:
+			PORTB = 0x00;
+			break;
 		default:
 			break;
 	}
