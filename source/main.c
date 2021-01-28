@@ -12,170 +12,72 @@
 #include "simAVRHeader.h"
 #endif
 
-enum Led_States{start,init,one,wait1,two,wait2,three,wait3,four,wait4,five,wait5,six,wait6,reset} states;
+enum Led_States{start,init,one,wait1,inc,two,wait2,three,wait3,four,wait4,five,wait5,six,wait6,reset} state;
 
  unsigned char but1 = 0x00;
 //unsigned char but2 = 0x00;
 //but1 = PINA & 0x01;
+//unsigned char tmp = 0x00;
 void fsm(){
+	//unsigned char tmp = 0x00;
 	but1 = ~PINA & 0x01;
+	
 	//but1 = ~PINA & 0x01;
 	//but2 = ~PINA & 0x02;
 
-	switch(states){
+	switch(state){
 		case start:
+		state = init;
+		break;
 
-		states = init;
 		case init:
-
-		states = one;
+		state = one;
 		break;
 
 		case one:
-		if (!but1){
-		states = one;
+		if(but1){
+		state = inc;
 		}
-		else
-		states = one;
+		else if(!but1){
+		state = one;
+		}
+		break;
+
+		case inc:
+		state = wait1;
 		break;
 
 		case wait1:
-		//if (!but1)
-		//states = wait1;
-		 states = two;
-		break;
-
-		case two:
-		if(but1){
-		states = wait2;
-		}
-		else
-		states = two;
-
-		break;
-
-		case wait2:
-		if (but1){
-		states = wait2;
-		}
-		else
-		states = three;
-		break;
-
-		case three:
-		if(but1)
-		states = wait3;
-		else
-		states = three;
-		break;
-
-		case wait3:
-		if(!but1)
-		states = wait3;
-		else
-		states = four;
-		break;
-
-		case four:
-		if(but1){
-		states = wait4;
-					}
-		else
-		states = four;
-		break;
-
-		case wait4:
 		if(!but1){
-		states = wait4;
+		state = one;
 		}
-		states = five;
+		else if (but1){
+		state = wait1;
+		}
 		break;
 
-		case five:
-		if(but1){
-		states = wait5;
-		}
-		else
-		states = five;
-		break;
-		case wait5:
-		if(!but1){
-		states = wait5;
-		}
-		else 
-		states = six;
-		break;
-
-		case six:
-		if (but1){
-		states = wait6;
-		}
-		else{
-		states = six;
-		}
-		break;
-		case wait6:
-		if(!but1){
-
-		states = reset;
-		}
-		else{
-		states = wait6;
-		}
-		break;
-		case reset:
-		if (but1)
-		states = init;
-		else
-		states = reset;
-		break;
+		default:
+		state = start;
+			break;
 	}
-	switch(states){
+	switch(state){
 		case start:
-			PORTB = 0;
 			break;
 		case init:
 			PORTB = 0x00;
-		break;
+			break;
 		case one:
-			PORTB = 0x01;
-		break;
-		case wait1:
-			//PORTB = 0x01;
-		break;
-		case two:
-		break;
-		case wait2:
-		//	PORTB = 0x03;
-		break;
-		case three:
-		break;
-		case wait3:
-			PORTB = 0x07;
 			break;
-		case four:
-			break;
-		case wait4:
-			PORTB = 0x15;
-			break;
-		case five:
+		case inc:
+			PORTB = 0x05;
 			break;
 
-		case wait5:
-			PORTB = 0x1F;
+		case wait1:
 			break;
-		case six:
-			break;
-		case wait6:
-			PORTB = 0x63;
-			break;
-		case reset:
+		default:
 			break;
 	}
-	
-
-	
-
+//	PORTB = tmp;
 }
 
 int main(void) {
@@ -183,10 +85,10 @@ int main(void) {
 DDRA = 0x00; PORTA = 0xFF; // Configure port A's  pins as inputs
 	DDRB = 0xFF; PORTB = 0x00;
     /* Insert your solution below */
-	states = init;
+	state = start;
 	PORTB = 0x00;
     while (1) {
 	fsm();
+
     }
-    return 1;
 }
