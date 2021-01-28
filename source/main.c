@@ -12,7 +12,7 @@
 #include "simAVRHeader.h"
 #endif
 
-enum Led_States{start,init,one,wait1,inc,two,wait2,inc2,three,wait3,four,wait4,five,wait5,six,wait6,reset} state;
+enum Led_States{start,init,one,wait1,inc,two,wait2,inc2,three,inc3,wait3,four,inc4,wait4,five,inc5,wait5,six,inc6,wait6,reset} state;
 
  unsigned char but1 = 0x00;
 //unsigned char but2 = 0x00;
@@ -74,7 +74,7 @@ void fsm(){
 
 		case wait2:
 		if(!but1){
-		state = two;
+		state = three;
 		}
 		else if (but1){
 		state = wait2;
@@ -82,6 +82,110 @@ void fsm(){
 		break;
 
 
+
+		
+
+		case three:
+		if(but1){
+		state = inc3;
+		}
+		else if(!but1){
+		state = three;
+		}
+		break;
+
+		case inc3:
+		state = wait3;
+		break;
+
+		case wait3:
+		if(!but1){
+		state = three;
+		}
+		else if (but1){
+		state = wait4;
+		}
+		break;
+
+		
+
+
+		
+
+
+		case four:
+		if(but1){
+		state = inc4;
+		}
+		else if(!but1){
+		state = four;
+		}
+		break;
+
+		case inc4:
+		state = wait4;
+		break;
+
+		case wait4:
+		if(!but1){
+		state = four;
+		}
+		else if (but1){
+		state = wait4;
+		}
+		break;
+
+/*
+
+		case five:
+		if(but1){
+		state = inc5;
+		}
+		else if(!but1){
+		state = five;
+		}
+		break;
+
+		case inc5:
+		state = wait5;
+		break;
+
+		case wait5:
+		if(!but1){
+		state = six;
+		}
+		else if (but1){
+		state = wait5;
+		}
+		break;
+
+
+
+		case six:
+		if(but1){
+		state = inc6;
+		}
+		else if(!but1){
+		state = six;
+		}
+		break;
+
+		case inc6:
+		state = wait6;
+		break;
+
+		case wait6:
+		if(!but1){
+		state = six;
+		}
+		else if (but1){
+		state = wait6;
+		}
+		break;
+
+
+
+		*/
 
 
 
@@ -108,6 +212,8 @@ void fsm(){
 			break;
 
 
+
+
 		case two:
 			break;
 		case inc2:
@@ -118,9 +224,47 @@ void fsm(){
 			break;
 
 
+		case three:
+			break;
+		case inc3:
+			PORTB = 0x04;
+			break;
+
+		case wait3:
+			break;
+
+		
+
+		case four:
+			break;
+		case inc4:
+			PORTB = 0x8;
+			break;
+
+		case wait4:
+			break;
+		
+/*
+
+		case five:
+			break;
+		case inc5:
+			PORTB = 0x30;
+			break;
+
+		case wait5:
+			break;
 
 
+		case six:
+			break;
+		case inc6:
+			PORTB = 0x31;
+			break;
 
+		case wait6:
+			break;
+*/
 
 		default:
 			break;
